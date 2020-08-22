@@ -1,6 +1,9 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/jimuyang/data-model/handler"
+)
 
 func main() {
 	r := gin.Default()
@@ -9,5 +12,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.GET("/demo", handler.Demo)
+	_ = r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
