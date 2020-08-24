@@ -1,61 +1,97 @@
 <template>
   <div class="modelContainer">
+   <!-- <Search style="margin-bottom:20px"/> -->
     <el-form
       :model="modelForm"
       ref="modelForm"
       label-width="100px"
       class="modelForm"
     >
+    <el-card >
+      <div slot="header" class="clearfix">
+        <span>基本信息</span>
+     </div>
       <el-form-item
         prop="name"
         label="模型名称"
       >
-        <el-input v-model="modelForm.name"></el-input>
+        <el-input v-model="modelForm.name" style="width:160px;padding-left:10px"></el-input>
       </el-form-item>
       <el-form-item
         prop="id"
         label="模型ID"
       >
-        <el-input v-model="modelForm.id"></el-input>
+        <el-input v-model="modelForm.id" style="width:160px;padding-left:10px"></el-input>
       </el-form-item>
-      <h3>字段列表</h3>
-      <el-form-item
-        v-for="(item, index) in modelForm.datas"
-        :key="item.key"
-        :prop="'datas.' + index + '.name'"
-      >
-        <el-input v-model="item.name"><template slot="prepend">名称</template></el-input>
-        <el-select
-          v-model="item.type"
-          placeholder="请选择"
-        >
-
-        <template slot="prefix">类型</template>
-          <el-option
-            v-for="option in options"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-          >
-          </el-option>
-
-        </el-select>
-        <el-input v-model="item.desc"><template slot="prepend">说明</template></el-input>
-        <!-- <el-button @click.prevent="removeField(domain)">删除</el-button> -->
-      </el-form-item>
-      <el-form-item>
+      </el-card>
+      <el-card class="fileds">
+            <div slot="header" class="clearfix">
+              <span>字段列表</span>
+          </div>
+          <el-form-item>
+            <el-table
+          :data="modelForm.datas"
+          style="width: 100%">
+          <el-table-column
+            label="名称"
+            width="180">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.name " style="width:100%" placeholder="名称"/>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="类型"
+            width="180">
+            <template slot-scope="scope">
+                <el-select
+                v-model="scope.row.type"
+                placeholder="类型"
+              >
+                <el-option
+                  v-for="option in options"
+                  :key="option.value"
+                  :label="option.label"
+                  :value="option.value"
+                >
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="描述"
+            width="300">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.desc " style="width:100%" placeholder="描述"/>
+            </template>
+          </el-table-column>
+          <el-table-column >
+            <template slot-scope="scope">
+              <!-- <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
+              <el-button
+                size="mini"
+                type="text"
+                @click="removeField(scope.row)">删除</el-button>
+          </template>
+          </el-table-column>
+        </el-table>
+         <div style="margin-top:20px;margin-left:10px"><el-button @click="addField"  style="width:100%;box-sizing:border-box;">+新增字段</el-button></div>
+        </el-form-item>
+      </el-card>
+   <!-- </el-form-item> -->
+      <el-card style="display:flex;justify-content:flex-end">
         <el-button
           type="primary"
           @click="submitForm('modelForm')"
         >提交</el-button>
-        <el-button @click="addField">新增field</el-button>
-        <el-button @click="resetForm('modelForm')">重置</el-button>
-      </el-form-item>
+      </el-card>
     </el-form>
   </div>
 </template>
 
 <script>
+// import Search from './search'
 export default {
   data () {
     return {
@@ -65,7 +101,7 @@ export default {
         datas: [{
           name: '',
           type: '',
-          key: 1,
+          key: '1',
           desc: ''
         }]
       },
@@ -78,6 +114,9 @@ export default {
         label: 'number'
       }]
     }
+  },
+  components: {
+    // Search
   },
   methods: {
     submitForm (formName) {
@@ -127,4 +166,21 @@ export default {
 .el-input {
   width: 200px;
 }
+.prefix{
+  color:#606266;
+  padding:0 10px
+}
+.el-card{
+  box-shadow: none !important;
+  border:none !important;
+}
+.el-card .clearfix {
+  font-weight: 500;
+}
+/* .el-form-item__content{
+  line-height: 0px !important;
+}
+.fields .el-card__body{
+  padding-top:0px !important;
+} */
 </style>
