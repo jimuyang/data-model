@@ -15,6 +15,7 @@
           <span>王小虎</span>
         </el-header>
         <!-- <el-main> -->
+          <!-- <div class="title">模型维护</div> -->
           <router-view />
         <!-- </el-main> -->
       </el-container>
@@ -94,5 +95,13 @@ a{
 }
 .is-active{
     background-color: #1890ff !important;
+}
+.title {
+  font-size:20px;
+  height:80px;
+  line-height: 80px;
+  background-color: white;
+  padding:0 20px;
+  font-weight:600
 }
 </style>

@@ -22,7 +22,7 @@ export default {
 
   methods: {
     searchModel () {
-      console.log('search:', this.searchVal)
+      this.$emit('searchModel', this.searchVal)
     }
   }
 }
@@ -31,9 +31,14 @@ export default {
 <style scoped>
   .el-input{
     width:160px;
-    padding-left:10px
+    padding-left:10px;
+    padding-right: 60px;
   }
   .el-form-item{
     margin-bottom: 0px !important;
   }
+  .el-card{
+    box-shadow: none !important;
+  }
+
 </style>

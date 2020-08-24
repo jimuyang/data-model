@@ -1,5 +1,5 @@
 <template>
-  <div class="modelContainer">
+  <div class="model-container">
    <!-- <Search style="margin-bottom:20px"/> -->
     <el-form
       :model="modelForm"
@@ -14,12 +14,14 @@
       <el-form-item
         prop="name"
         label="模型名称"
+        required
       >
         <el-input v-model="modelForm.name" style="width:160px;padding-left:10px"></el-input>
       </el-form-item>
       <el-form-item
         prop="id"
         label="模型ID"
+        required
       >
         <el-input v-model="modelForm.id" style="width:160px;padding-left:10px"></el-input>
       </el-form-item>
@@ -36,7 +38,7 @@
             label="名称"
             width="180">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.name " style="width:100%" placeholder="名称"/>
+              <el-input v-model="scope.row.name " style="width:100%" placeholder="名称" />
             </template>
           </el-table-column>
           <el-table-column
@@ -66,20 +68,25 @@
           </el-table-column>
           <el-table-column >
             <template slot-scope="scope">
-              <!-- <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
-              <el-button
+              <div style="display:flex">
+                <el-button
                 size="mini"
                 type="text"
                 @click="removeField(scope.row)">删除</el-button>
+                <el-button
+                size="mini"
+                type="text"
+                v-if="scope.row.type==='list'"
+                style="padding-left:5px;"
+                @click="maintenList(scope.row)">List配置</el-button>
+              </div>
+
           </template>
           </el-table-column>
         </el-table>
          <div style="margin-top:20px;margin-left:10px"><el-button @click="addField"  style="width:100%;box-sizing:border-box;">+新增字段</el-button></div>
         </el-form-item>
       </el-card>
-   <!-- </el-form-item> -->
       <el-card style="display:flex;justify-content:flex-end">
         <el-button
           type="primary"
@@ -102,7 +109,8 @@ export default {
           name: '',
           type: '',
           key: '1',
-          desc: ''
+          desc: '',
+          extra: ''// 类型为list时添加信息
         }]
       },
       typeValue: '',
@@ -112,6 +120,10 @@ export default {
       }, {
         value: 'number',
         label: 'number'
+      },
+      {
+        value: 'list',
+        label: 'list'
       }]
     }
   },
@@ -120,20 +132,20 @@ export default {
   },
   methods: {
     submitForm (formName) {
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      // alert('submit!')
-      // const data = {
-      //   name: this.modelForm.name,
-      //   id: this.modelForm.id,
-      //   datas: this.modelForm.datas
-      // }
-      const data = this.modelForm
-      console.log('submit', data)
-      this.$http({
-        method: 'post',
-        url: 'http://192.168.31.136:8080/model',
-        data
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const data = {
+            name: this.modelForm.name,
+            id: this.modelForm.id,
+            datas: this.modelForm.datas
+          }
+          // const data = this.modelForm
+          console.log('submit', data)
+          // this.$http({
+          //   method: 'post',
+          //   url: 'http://192.168.31.136:8080/model',
+          //   data
+        }
       })
       //   } else {
       //     console.log('error submit!!')
@@ -156,12 +168,14 @@ export default {
         type: '',
         key: Math.random()
       })
+    },
+    maintenList () {
+      console.log('配置list')
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .el-input {
   width: 200px;

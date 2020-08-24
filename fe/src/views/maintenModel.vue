@@ -19,14 +19,6 @@ export default {
 </script>
 
 <style scoped>
-.title {
-  font-size:20px;
-  height:80px;
-  line-height: 80px;
-  background-color: white;
-  padding:0 20px;
-  font-weight:600
-}
 .body{
   margin: 20px;
 }
