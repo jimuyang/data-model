@@ -1,51 +1,84 @@
 <template>
   <div class="model-container">
-   <!-- <Search style="margin-bottom:20px"/> -->
+    <!-- <Search style="margin-bottom:20px"/> -->
     <el-form
       :model="modelForm"
+      :rules="rules"
       ref="modelForm"
       label-width="100px"
       class="modelForm"
     >
-    <el-card >
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
-     </div>
-      <el-form-item
-        prop="name"
-        label="模型名称"
-        required
-      >
-        <el-input v-model="modelForm.name" style="width:160px;padding-left:10px"></el-input>
-      </el-form-item>
-      <el-form-item
-        prop="id"
-        label="模型ID"
-        required
-      >
-        <el-input v-model="modelForm.id" style="width:160px;padding-left:10px"></el-input>
-      </el-form-item>
+      <el-card>
+        <div
+          slot="header"
+          class="clearfix"
+        >
+          <span>基本信息</span>
+        </div>
+        <el-form-item
+          prop="name"
+          label="模型名称"
+          required
+        >
+          <el-input
+            v-model="modelForm.name"
+            style="width:160px"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          prop="id"
+          label="模型ID"
+          required
+        >
+          <el-input
+            v-model="modelForm.id"
+            style="width:160px"
+          ></el-input>
+        </el-form-item>
       </el-card>
       <el-card class="fileds">
-            <div slot="header" class="clearfix">
-              <span>字段列表</span>
-          </div>
-          <el-form-item>
-            <el-table
+        <div
+          slot="header"
+          class="clearfix"
+        >
+          <span>字段列表</span>
+        </div>
+        <!-- <el-form-item> -->
+        <el-table
           :data="modelForm.datas"
-          style="width: 100%">
+          style="width: 100%"
+        >
           <el-table-column
             label="名称"
-            width="180">
+            width="180"
+          >
+            <template slot="header">
+              <span
+                class="table-header-star"
+                style="color: #F56C6C;margin-right: 4px;"
+              >*</span>
+              <span class="table-header-content">名称</span>
+            </template>
             <template slot-scope="scope">
-              <el-input v-model="scope.row.name " style="width:100%" placeholder="名称" />
+              <el-form-item
+                :prop="'datas.' + scope.$index + '.name'"
+                :rules="rules.name"
+                label-width="0"
+              >
+                <el-input
+                  v-model="scope.row.name "
+                  style="width:100%"
+                  placeholder="名称"
+                />
+              </el-form-item>
             </template>
           </el-table-column>
           <el-table-column
             label="类型"
-            width="180">
+            width="180"
+          >
             <template slot-scope="scope">
-                <el-select
+              <el-select
                 v-model="scope.row.type"
                 placeholder="类型"
               >
@@ -61,31 +94,43 @@
           </el-table-column>
           <el-table-column
             label="描述"
-            width="300">
+            width="300"
+          >
             <template slot-scope="scope">
-              <el-input v-model="scope.row.desc " style="width:100%" placeholder="描述"/>
+              <el-input
+                v-model="scope.row.desc "
+                style="width:100%"
+                placeholder="描述"
+              />
             </template>
           </el-table-column>
-          <el-table-column >
+          <el-table-column>
             <template slot-scope="scope">
               <div style="display:flex">
                 <el-button
-                size="mini"
-                type="text"
-                @click="removeField(scope.row)">删除</el-button>
+                  size="mini"
+                  type="text"
+                  @click="removeField(scope.row)"
+                >删除</el-button>
                 <el-button
-                size="mini"
-                type="text"
-                v-if="scope.row.type==='list'"
-                style="padding-left:5px;"
-                @click="maintenList(scope.row)">List配置</el-button>
+                  size="mini"
+                  type="text"
+                  v-if="scope.row.type==='list'"
+                  style="padding-left:5px;"
+                  @click="maintenList(scope.row)"
+                >List配置</el-button>
               </div>
 
-          </template>
+            </template>
           </el-table-column>
         </el-table>
-         <div style="margin-top:20px;margin-left:10px"><el-button @click="addField"  style="width:100%;box-sizing:border-box;">+新增字段</el-button></div>
-        </el-form-item>
+        <div style="margin-top:20px;margin-left:10px">
+          <el-button
+            @click="addField"
+            style="width:100%;box-sizing:border-box;"
+          >+新增字段</el-button>
+        </div>
+        <!-- </el-form-item> -->
       </el-card>
       <el-card style="display:flex;justify-content:flex-end">
         <el-button
@@ -112,6 +157,16 @@ export default {
           desc: '',
           extra: ''// 类型为list时添加信息
         }]
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入活动名称' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        id: [
+          { required: true, message: '请输入id' },
+          { min: 3, max: 5, message: '长度在 2 到 3 个字符', trigger: 'blur' }
+        ]
       },
       typeValue: '',
       options: [{
@@ -180,13 +235,13 @@ export default {
 .el-input {
   width: 200px;
 }
-.prefix{
-  color:#606266;
-  padding:0 10px
+.prefix {
+  color: #606266;
+  padding: 0 10px;
 }
-.el-card{
+.el-card {
   box-shadow: none !important;
-  border:none !important;
+  border: none !important;
 }
 .el-card .clearfix {
   font-weight: 500;
@@ -197,4 +252,10 @@ export default {
 .fields .el-card__body{
   padding-top:0px !important;
 } */
+.cell .el-form-item {
+  margin: 20px 0;
+}
+td {
+  padding: 4px 0 !important;
+}
 </style>
